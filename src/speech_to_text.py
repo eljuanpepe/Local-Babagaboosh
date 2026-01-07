@@ -14,7 +14,7 @@ class SpeechToTextManager:
 
         vosk.SetLogLevel(-1)
         print("Starting speech to text engine please wait...")
-        model_path = "model"
+        model_path = "models/vosk-model"
         model = vosk.Model(model_path)
         self.rec = vosk.KaldiRecognizer(model, self.fs)
 

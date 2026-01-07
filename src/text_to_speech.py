@@ -7,7 +7,8 @@ import os
 class TTSManager:
     def __init__(self):
         self.kokoro = Kokoro(
-            "kokoro-model/kokoro-v1.0.int8.onnx", "kokoro-model/voices-v1.0.bin"
+            "models/kokoro-model/kokoro-v1.0.int8.onnx",
+            "models/kokoro-model/voices-v1.0.bin",
         )
         # all_voices = self.kokoro.get_voices()
         # print(f"\nAll TTS voices: \n{all_voices}\n")
