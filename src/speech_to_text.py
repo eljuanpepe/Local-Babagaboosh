@@ -4,11 +4,16 @@ import keyboard
 import queue
 import json
 import sys
+import tomllib
 
 
 class SpeechToTextManager:
     def __init__(self):
-        self.fs = 48000
+        with open("config.toml", "rb") as f:
+            config = tomllib.load(f)
+
+        self.fs = config["speech_to_text"]["sample_rate"]
+        self.stop_key = config["speech_to_text"]["key_stop_recording"]
         self.queue = queue.Queue()
         self.stop_recording = False
 
@@ -18,7 +23,9 @@ class SpeechToTextManager:
         model = vosk.Model(model_path)
         self.rec = vosk.KaldiRecognizer(model, self.fs)
 
-        keyboard.add_hotkey("p", lambda: setattr(self, "stop_recording", True))
+        keyboard.add_hotkey(
+            self.stop_key, lambda: setattr(self, "stop_recording", True)
+        )
 
     def callback(self, indata, frames, time, status):
         if status:

@@ -1,0 +1,18 @@
+[ollama]
+ai_model = "llama3.2:1b"
+max_message_context = 10
+
+[speech_to_text]
+sample_rate = 48000
+key_stop_recording = 'p'
+key_start_recording = 'f5'
+
+[tts]
+tts_engine = "kokoro"
+[tts.kokoro]
+voice = "af_alloy"
+
+[obs_websockets]
+websocket_host = "localhost"
+websocket_port = 4455
+websocket_password = "TwitchChat9"

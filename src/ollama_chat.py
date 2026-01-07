@@ -1,16 +1,19 @@
-import os
 import ollama
+import tomllib
 from rich import print
 
 
 class AIManager:
     def __init__(self):
+        with open("config.toml", "rb") as f:
+            config = tomllib.load(f)
+
         self.chat_history = []  # Stores the entire conversation
-        self.AI_MODEL = "llama3.2:1b"
-        self.max_message_context = 10
+        self.AI_MODEL = config["ollama"]["ai_model"]
+        self.max_message_context = config["ollama"]["max_message_context"]
 
     def ask_question(self, messages):
-        print("[yellow]\nAsking ChatGPT a question...")
+        print("[yellow]\nAsking AI a question...")
         return ollama.chat(self.AI_MODEL, messages=messages)
 
     # Asks a question with no chat history
