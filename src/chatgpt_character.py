@@ -1,4 +1,5 @@
 import time
+import tomllib
 import keyboard
 from rich import print
 from speech_to_text import SpeechToTextManager
@@ -6,8 +7,6 @@ from ollama_chat import AIManager
 from text_to_speech import TTSManager
 from obs_websockets import OBSWebsocketsManager
 from audio_player import AudioManager
-
-ELEVENLABS_VOICE = "Pointboat"  # Replace this with the name of whatever voice you have created on Elevenlabs
 
 BACKUP_FILE = "ChatHistoryBackup.txt"
 
@@ -20,20 +19,24 @@ audio_manager = AudioManager()
 with open("ai_system_prompt.txt", "r") as file:
     system_prompt = file.read()
 
+with open("config.toml", "rb") as f:
+    config = tomllib.load(f)
+    talk_key = config["speech_to_text"]["key_start_recording"]
+
 FIRST_SYSTEM_MESSAGE = {
     "role": "system",
     "content": system_prompt,
 }
 openai_manager.chat_history.append(FIRST_SYSTEM_MESSAGE)
 
-print("[green]Starting the loop, press F4 to begin")
+print(f"[green]Starting the loop, press {talk_key} to begin")
 while True:
-    # Wait until user presses "f4" key
-    if keyboard.read_key() != "f4":
+    # Wait until user presses talk key
+    if keyboard.read_key() != talk_key:
         time.sleep(0.1)
         continue
 
-    print("[green]User pressed F4 key! Now listening to your microphone:")
+    print(f"[green]User pressed {talk_key} key! Now listening to your microphone:")
 
     # Get question from mic
     mic_result = speechtotext_manager.speechtotext_from_mic_continuous()
@@ -50,9 +53,7 @@ while True:
         file.write(str(openai_manager.chat_history))
 
     # Send it to 11Labs to turn into cool audio
-    elevenlabs_output = elevenlabs_manager.text_to_audio(
-        openai_result, ELEVENLABS_VOICE, False
-    )
+    elevenlabs_output = elevenlabs_manager.text_to_audio(openai_result, False)
 
     # Enable the picture of Pajama Sam in OBS
     obswebsockets_manager.set_source_visibility("*** Mid Monitor", "Pajama Sam", True)

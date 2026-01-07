@@ -18,7 +18,7 @@ class TTSManager:
         # print(f"\nAll TTS voices: \n{all_voices}\n")
 
     def text_to_audio(
-        self, input_text, voice=None, save_as_wave=False, subdirectory=""
+        self, input_text, save_as_wave=False, subdirectory="", voice=None
     ):
         tts_voice = self.voice if voice is None else voice
 
@@ -36,12 +36,3 @@ class TTSManager:
         sf.write(output_path, samples, sample_rates)
 
         return output_path
-
-
-if __name__ == "__main__":
-    elevenlabs_manager = TTSManager()
-
-    file_path = elevenlabs_manager.text_to_audio(
-        "This is my saved test audio, please make me beautiful", "af_aoede"
-    )
-    print("Finished with all tests")
