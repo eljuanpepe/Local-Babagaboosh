@@ -11,6 +11,8 @@ key_start_recording = 'f4'
 tts_engine = "kokoro"
 [tts.kokoro]
 voice = "af_alloy"
+[tts.piper]
+voice = "en_US-ljspeech-high"
 
 [obs_websockets]
 websocket_host = "localhost"

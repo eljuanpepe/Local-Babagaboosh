@@ -8,7 +8,7 @@ class TTSTest(unittest.TestCase):
 
     def test_audio_generation(self):
         file_path = self.tts_manager.text_to_audio(
-            "This is my saved test audio, please make me beautiful", voice="af_aoede"
+            "This is my saved test audio, please make me beautiful"
         )
         self.assertIsNotNone(file_path)
 

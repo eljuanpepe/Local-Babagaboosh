@@ -59,7 +59,7 @@ while True:
         file.write(str(openai_manager.chat_history))
 
     # Send it to 11Labs to turn into cool audio
-    elevenlabs_output = elevenlabs_manager.text_to_audio(openai_result, False)
+    elevenlabs_output = elevenlabs_manager.text_to_audio(openai_result)
 
     # Enable the picture of Pajama Sam in OBS
     obswebsockets_manager.set_source_visibility(scene, source, True)
