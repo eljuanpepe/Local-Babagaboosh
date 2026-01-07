@@ -1,4 +1,3 @@
-import time
 import sys
 import tomllib
 from obswebsocket import obsws, requests  # noqa: E402

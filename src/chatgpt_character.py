@@ -1,6 +1,6 @@
 import time
 import tomllib
-import keyboard
+from pynput import keyboard
 from rich import print
 from speech_to_text import SpeechToTextManager
 from ollama_chat import AIManager
@@ -22,6 +22,8 @@ with open("ai_system_prompt.txt", "r") as file:
 with open("config.toml", "rb") as f:
     config = tomllib.load(f)
     talk_key = config["speech_to_text"]["key_start_recording"]
+    scene = config["obs_websockets"]["scene"]
+    source = config["obs_websockets"]["source"]
 
 FIRST_SYSTEM_MESSAGE = {
     "role": "system",
@@ -29,12 +31,16 @@ FIRST_SYSTEM_MESSAGE = {
 }
 openai_manager.chat_history.append(FIRST_SYSTEM_MESSAGE)
 
+
+def on_press(key):
+    if getattr(key, "name", None) == talk_key:
+        return False
+
+
 print(f"[green]Starting the loop, press {talk_key} to begin")
 while True:
-    # Wait until user presses talk key
-    if keyboard.read_key() != talk_key:
-        time.sleep(0.1)
-        continue
+    with keyboard.Listener(on_press=on_press) as listener:  # type: ignore
+        listener.join()
 
     print(f"[green]User pressed {talk_key} key! Now listening to your microphone:")
 
@@ -56,13 +62,13 @@ while True:
     elevenlabs_output = elevenlabs_manager.text_to_audio(openai_result, False)
 
     # Enable the picture of Pajama Sam in OBS
-    obswebsockets_manager.set_source_visibility("*** Mid Monitor", "Pajama Sam", True)
+    obswebsockets_manager.set_source_visibility(scene, source, True)
 
     # Play the mp3 file
     audio_manager.play_audio(elevenlabs_output, True, True, True)
 
     # Disable Pajama Sam pic in OBS
-    obswebsockets_manager.set_source_visibility("*** Mid Monitor", "Pajama Sam", False)
+    obswebsockets_manager.set_source_visibility(scene, source, False)
 
     print(
         "[green]\n!!!!!!!\nFINISHED PROCESSING DIALOGUE.\nREADY FOR NEXT INPUT\n!!!!!!!\n"

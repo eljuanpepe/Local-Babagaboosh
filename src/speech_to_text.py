@@ -1,6 +1,6 @@
 import vosk
 import sounddevice as sd
-import keyboard
+from pynput import keyboard
 import queue
 import json
 import sys
@@ -23,22 +23,16 @@ class SpeechToTextManager:
         model = vosk.Model(model_path)
         self.rec = vosk.KaldiRecognizer(model, self.fs)
 
-        keyboard.add_hotkey(
-            self.stop_key, lambda: setattr(self, "stop_recording", True)
-        )
+        self.listener = keyboard.GlobalHotKeys({self.stop_key: self.on_activate})
+        self.listener.start()
+
+    def on_activate(self):
+        self.stop_recording = True
 
     def callback(self, indata, frames, time, status):
         if status:
             print(status, file=sys.stderr)
         self.queue.put(bytes(indata))
-
-    def on_press(self, key):
-        try:
-            print("reached", key.char)
-            if key.char == "p":
-                self.stop_recording = True
-        except AttributeError:
-            pass
 
     def speechtotext_from_mic_continuous(self):
         full_transcript = []
