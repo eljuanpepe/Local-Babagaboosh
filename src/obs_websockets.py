@@ -1,4 +1,5 @@
 import sys
+
 import tomllib
 from obswebsocket import obsws, requests  # noqa: E402
 
@@ -23,7 +24,7 @@ class OBSWebsocketsManager:
                 config["obs_websockets"]["websocket_password"],
             )
             self.ws.connect()
-        except:
+        except Exception:
             print(
                 "\nPANIC!!\nCOULD NOT CONNECT TO OBS!\nDouble check that you have OBS open and that your websockets server is enabled in OBS."
             )

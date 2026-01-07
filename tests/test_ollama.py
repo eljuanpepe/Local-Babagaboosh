@@ -1,4 +1,5 @@
 import unittest
+
 from src.ollama_chat import AIManager
 
 

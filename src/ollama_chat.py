@@ -1,6 +1,5 @@
 import ollama
 import tomllib
-import requests
 from rich import print
 
 

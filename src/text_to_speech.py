@@ -1,9 +1,10 @@
-from kokoro_onnx import Kokoro
-from piper import PiperVoice
+import os
+import wave
+
 import soundfile as sf
 import tomllib
-import wave
-import os
+from kokoro_onnx import Kokoro
+from piper import PiperVoice
 
 
 class TTSManager:

@@ -1,13 +1,13 @@
-import pygame
-import time
-import os
 import asyncio
+import os
+import time
+
+import pygame
 import soundfile as sf
 from mutagen.mp3 import MP3
 
 
 class AudioManager:
-
     def __init__(self):
         # Use higher frequency to prevent audio glitching noises
         # Use higher buffer because why not (default is 512)

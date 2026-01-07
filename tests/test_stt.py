@@ -1,4 +1,5 @@
 import unittest
+
 from src.speech_to_text import SpeechToTextManager
 
 

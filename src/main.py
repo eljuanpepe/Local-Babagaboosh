@@ -1,12 +1,12 @@
-import time
 import tomllib
 from pynput import keyboard
 from rich import print
-from speech_to_text import SpeechToTextManager
-from ollama_chat import AIManager
-from text_to_speech import TTSManager
-from obs_websockets import OBSWebsocketsManager
+
 from audio_player import AudioManager
+from obs_websockets import OBSWebsocketsManager
+from ollama_chat import AIManager
+from speech_to_text import SpeechToTextManager
+from text_to_speech import TTSManager
 
 BACKUP_FILE = "ChatHistoryBackup.txt"
 

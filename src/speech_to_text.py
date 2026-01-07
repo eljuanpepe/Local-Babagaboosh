@@ -1,10 +1,11 @@
-import vosk
-import sounddevice as sd
-from pynput import keyboard
-import queue
 import json
+import queue
 import sys
+
+import sounddevice as sd
 import tomllib
+import vosk
+from pynput import keyboard
 
 
 class SpeechToTextManager:
@@ -56,7 +57,6 @@ class SpeechToTextManager:
             channels=1,
             callback=self.callback,
         ):
-
             while not self.stop_recording:
                 try:
                     data = self.queue.get(timeout=0.1)

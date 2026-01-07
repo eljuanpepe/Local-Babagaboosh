@@ -1,5 +1,6 @@
-from src.text_to_speech import TTSManager
 import unittest
+
+from src.text_to_speech import TTSManager
 
 
 class TTSTest(unittest.TestCase):
