@@ -10,9 +10,9 @@ from audio_player import AudioManager
 
 BACKUP_FILE = "ChatHistoryBackup.txt"
 
-elevenlabs_manager = TTSManager()
+tts = TTSManager()
 obswebsockets_manager = OBSWebsocketsManager()
-openai_manager = AIManager()
+ai_manager = AIManager()
 speechtotext_manager = SpeechToTextManager()
 audio_manager = AudioManager()
 
@@ -29,7 +29,7 @@ FIRST_SYSTEM_MESSAGE = {
     "role": "system",
     "content": system_prompt,
 }
-openai_manager.chat_history.append(FIRST_SYSTEM_MESSAGE)
+ai_manager.chat_history.append(FIRST_SYSTEM_MESSAGE)
 
 
 def on_press(key):
@@ -52,14 +52,14 @@ while True:
         continue
 
     # Send question to OpenAi
-    openai_result = openai_manager.chat_with_history(mic_result)
+    openai_result = ai_manager.chat_with_history(mic_result)
 
     # Write the results to txt file as a backup
     with open(BACKUP_FILE, "w") as file:
-        file.write(str(openai_manager.chat_history))
+        file.write(str(ai_manager.chat_history))
 
     # Send it to 11Labs to turn into cool audio
-    elevenlabs_output = elevenlabs_manager.text_to_audio(openai_result)
+    elevenlabs_output = tts.text_to_audio(openai_result)
 
     # Enable the picture of Pajama Sam in OBS
     obswebsockets_manager.set_source_visibility(scene, source, True)
