@@ -12,8 +12,8 @@ BACKUP_FILE = "ChatHistoryBackup.txt"
 
 elevenlabs_manager = TTSManager()
 obswebsockets_manager = OBSWebsocketsManager()
-speechtotext_manager = SpeechToTextManager()
 openai_manager = AIManager()
+speechtotext_manager = SpeechToTextManager()
 audio_manager = AudioManager()
 
 with open("ai_system_prompt.txt", "r") as file:

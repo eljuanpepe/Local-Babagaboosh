@@ -8,21 +8,42 @@ import os
 
 class TTSManager:
     def __init__(self):
-        with open("config.toml", "rb") as f:
-            config = tomllib.load(f)
-        self.engine = config["tts"]["tts_engine"]
+        try:
+            with open("config.toml", "rb") as f:
+                config = tomllib.load(f)
+                self.engine = config["tts"]["tts_engine"]
+        except KeyError:
+            print("Cannot find configuration for TTS Engine")
+            exit(1)
 
         if self.engine == "kokoro":
-            self.voice = config["tts"]["kokoro"]["voice"]
-            self.kokoro = Kokoro(
-                "models/kokoro-model/kokoro-v1.0.int8.onnx",
-                "models/kokoro-model/voices-v1.0.bin",
-            )
+            kokoro_voice = config["tts"]["kokoro"]["voice"]
+            if kokoro_voice:
+                self.voice = kokoro_voice
+            else:
+                print("Voice for kokoro not selected")
+                exit(1)
+
+            try:
+                self.kokoro = Kokoro(
+                    "models/kokoro-model/kokoro-v1.0.int8.onnx",
+                    "models/kokoro-model/voices-v1.0.bin",
+                )
+            except FileNotFoundError as e:
+                print(e)
             # all_voices = self.kokoro.get_voices()
             # print(f"\nAll TTS voices: \n{all_voices}\n")
+        elif self.engine == "kokoro":
+            piper_voice = config["tts"]["piper"]["voice"]
+            if piper_voice:
+                self.voice = f"models/piper-voices/{piper_voice}.onnx"
+                self.piper = PiperVoice.load(self.voice)
+            else:
+                print("Voice for piper not selected")
+                exit(1)
         else:
-            self.voice = f"models/piper-voices/{config["tts"]["piper"]["voice"]}.onnx"
-            self.piper = PiperVoice.load(self.voice)
+            print("No TTS engine selected")
+            exit(1)
 
     def kokoro_manager(self, input_text, subdirectory=""):
         samples, sample_rates = self.kokoro.create(

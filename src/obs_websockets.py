@@ -8,8 +8,12 @@ from obswebsocket import obsws, requests  # noqa: E402
 
 class OBSWebsocketsManager:
     def __init__(self):
-        with open("config.toml", "rb") as f:
-            config = tomllib.load(f)
+        try:
+            with open("config.toml", "rb") as f:
+                config = tomllib.load(f)
+        except KeyError:
+            print("Cannot find configuration for OBS WebSockets")
+            exit(1)
 
         try:
             # Connect to websockets

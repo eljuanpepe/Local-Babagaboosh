@@ -9,18 +9,28 @@ import tomllib
 
 class SpeechToTextManager:
     def __init__(self):
-        with open("config.toml", "rb") as f:
-            config = tomllib.load(f)
+        try:
+            with open("config.toml", "rb") as f:
+                config = tomllib.load(f)
+                self.fs = config["speech_to_text"]["sample_rate"]
+                self.stop_key = config["speech_to_text"]["key_stop_recording"]
+        except Exception:
+            print("Cannot find configuration for Speech to Text Engine")
+            exit(1)
 
-        self.fs = config["speech_to_text"]["sample_rate"]
-        self.stop_key = config["speech_to_text"]["key_stop_recording"]
         self.queue = queue.Queue()
         self.stop_recording = False
 
         vosk.SetLogLevel(-1)
         print("Starting speech to text engine please wait...")
         model_path = "models/vosk-model"
-        model = vosk.Model(model_path)
+        try:
+            model = vosk.Model(model_path)
+        except Exception:
+            print(
+                "if you don't have a model, download one at https://alphacephei.com/vosk/models"
+            )
+            exit(1)
         self.rec = vosk.KaldiRecognizer(model, self.fs)
 
         self.listener = keyboard.GlobalHotKeys({self.stop_key: self.on_activate})

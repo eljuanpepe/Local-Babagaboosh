@@ -1,12 +1,21 @@
 import ollama
 import tomllib
+import requests
 from rich import print
 
 
 class AIManager:
     def __init__(self):
-        with open("config.toml", "rb") as f:
-            config = tomllib.load(f)
+        try:
+            with open("config.toml", "rb") as f:
+                config = tomllib.load(f)
+        except KeyError:
+            print("Configuration for Ollama not found")
+            exit(1)
+
+        if not self.check_ollama():
+            print("Cannot connect to Ollama, is it running?")
+            exit(1)
 
         self.chat_history = []  # Stores the entire conversation
         self.AI_MODEL = config["ollama"]["ai_model"]
@@ -15,6 +24,13 @@ class AIManager:
     def ask_question(self, messages):
         print("[yellow]\nAsking AI a question...")
         return ollama.chat(self.AI_MODEL, messages=messages)
+
+    def check_ollama(self):
+        try:
+            ollama.list()
+            return True
+        except Exception:
+            return False
 
     # Asks a question with no chat history
     def chat(self, prompt=""):
