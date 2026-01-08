@@ -7,7 +7,7 @@ This was written in Python 3.12.
 
 1) Run `pip install -r requirements.txt` to install all modules.
 
-2) You will need to put a Vosk model and a Kokoro TTS or Piper TTS voice inside it's respective folder inside the models directory.
+2) Place a Vosk model and either a Kokoro TTS model or a Piper TTS voice into their corresponding folders inside the models directory.
 
 3) Optionally, you can use OBS Websockets and an OBS plugin to make images move while talking. First open up OBS. Make sure you're running version 28.X or later. Click Tools, then WebSocket Server Settings. Make sure "Enable WebSocket server" is checked. Then set Server Port to '4455' and set the Server Password to 'TwitchChat9'. If you use a different Server Port or Server Password in your OBS, just make sure you update the config file file accordingly. Next install the Move OBS plugin: https://obsproject.com/forum/resources/move.913/ Now you can use this plugin to add a filter to an audio source that will change an image's transform based on the audio waveform. For example, I have this filter on a specific audio track that will move Pajama Sam's image whenever text-to-speech audio is playing in that audio track. Note that OBS must be open when you're running this code, otherwise OBS WebSockets won't be able to connect. If you don't need the images to move while talking, you can just delete the OBS portions of the code.
 
